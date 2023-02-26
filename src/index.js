@@ -60,3 +60,53 @@ function getPartOfDay(){
 }
 
 // greeting finish
+
+//background start
+let randomNum = 1;
+
+function getRandomNum() {
+    randomNum = Math.floor(Math.random() * 20 + 1)
+}
+getRandomNum();
+
+function setBg() {
+    let i = getPartOfDay();
+    let num = randomNum;
+    let folder = '';
+    num < 10 ? num = num.toString().padStart(2, '0') : num = num.toString();
+    if (i === 0) {
+        folder = 'night'
+    }
+    else if (i === 1) {
+        folder = 'morning'
+    }
+    else if (i === 2) {
+        folder = 'afternoon'
+    }
+    else {
+        folder = 'evening'
+    }
+    let url = `https://raw.githubusercontent.com/setter-getter/momentum_img/gh-pages/${folder}/${num}.jpg`;
+    const img = new Image();
+    img.src = url;
+    img.onload = () => {
+        document.body.style.backgroundImage = `url(${img.src})`;
+    };
+}
+setBg();
+
+let slideNext = document.querySelector('.slide-next');
+slideNext.addEventListener('click', getSlideNext)
+let slidePrev = document.querySelector('.slide-prev');
+slidePrev.addEventListener('click', getSlidePrev)
+
+function getSlideNext() {
+    randomNum < 20 ? randomNum++ : randomNum = 1
+    setBg();
+}
+
+function getSlidePrev() {
+    randomNum > 1 ? randomNum-- : randomNum = 20
+    setBg();
+}
+//background finish
