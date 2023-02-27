@@ -110,3 +110,72 @@ function getSlidePrev() {
     setBg();
 }
 //background finish
+
+//weather widget start
+
+const weatherIcon = document.querySelector('.weather-icon');
+const temperature = document.querySelector('.temperature');
+const weatherDescription = document.querySelector('.weather-description');
+const city = document.querySelector('.city');
+const wind = document.querySelector('.wind');
+const humidity = document.querySelector('.humidity');
+
+// city.addEventListener('keyup', function () {
+
+// })
+
+city.value = 'Minsk';
+
+// if(!localStorage.getItem('city')){
+//     city.value = 'Minsk';
+//     getWeather();
+// }
+
+
+
+
+city.addEventListener('change', getWeather);
+
+async function getWeather() {
+
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=en&appid=779ff40c3c824c3a032d675521b5b15c&units=metric`;
+    const res = await fetch(url);
+    // if(res.status === 404 || res.status === 400){
+    //     alert('Введите город')
+    //     city.value = '';
+    // };
+    const data = await res.json();
+    weatherIcon.className = 'weather-icon owf';
+    weatherDescription.textContent = '';
+    temperature.textContent = '';
+    weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+    temperature.textContent = `${Math.round(data.main.temp)}°C`;
+    weatherDescription.textContent = data.weather[0].description;
+    wind.textContent = `Wind speed: ${Math.round(data.wind.speed)} m/s`;
+    humidity.textContent = `Humidity: ${data.main.humidity}%`;
+}
+getWeather();
+
+
+
+//weather widget finish
+
+//quotes start
+
+const quoteOfDay = document.querySelector('.quote');
+const author = document.querySelector('.author');
+
+
+async function getQuotes() {
+    let i = 0;
+    i = Math.floor(Math.random() * 102)
+    const quotes = './assets/quotes.json';
+    const res = await fetch(quotes);
+    const data = await res.json();
+    quoteOfDay.textContent = data.quotes[i].quote
+    author.textContent = data.quotes[i].author
+    console.log(data.quotes);
+}
+getQuotes()
+
+//quotes finish
