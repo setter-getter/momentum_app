@@ -1,5 +1,5 @@
-// import playList from './playList.js';
-// console.log(playList);
+import playList from './playList.js';
+console.log('playList', playList);
 
 // time 
 
@@ -162,8 +162,7 @@ const author = document.querySelector('.author');
 const changeQuote = document.querySelector('.change-quote')
 
 async function getQuotes() {
-    let i = 0;
-    i = Math.floor(Math.random() * 102)
+    let i = Math.floor(Math.random() * 102)
     const quotes = './src/assets/quotes.json';
     const res = await fetch(quotes);
     const data = await res.json();
@@ -176,43 +175,68 @@ changeQuote.addEventListener('click', getQuotes);
 
 // player
 
-// let isPlay = false;
-// let playNum = 0;
-// const audio = document.querySelector('audio');
-// const plaPrev = document.querySelector('.play-prev');
-// const play = document.querySelector('.play')
-// const playNext = document.querySelector('.play-next')
-// // console.log('audio',audio.json())
+let isPlay = false;
+let playNum = 0;
+const audio = new Audio();
+const playPrevBtn = document.querySelector('.play-prev');
+const play = document.querySelector('.play')
+const playNextBtn = document.querySelector('.play-next')
 
-// function playAudio() {
-//     if (!isPlay) {
-//         audio.currentTime = 0;
-//         audio.play();
-//         isPlay = true;
-//     } else {
-//         audio.pause();
-//         isPlay = false;
-//     }
-// }
+function playAudio() {
+    audio.src = playList[playNum].src;
+    if (!isPlay) {
+        // audio.currentTime = 0;
+        audio.play();
+        isPlay = true;
+    } else {
+        audio.pause();
+        isPlay = false;
+    }
+    ul.children[playNum].classList.add('item-active');
+}
+play.addEventListener('click', playAudio);
+audio.addEventListener('ended', playNext);
 
-// function pauseBtn() {
-//     if (!isPlay) {
-//         play.classList.remove('pause')
-//     } else {
-//         play.classList.add('pause')
-//     }
-// }
+//добаление иконки паузы после клика 
+function pauseBtn() {
+    if (!isPlay) {
+        play.classList.remove('pause')
+    } else {
+        play.classList.add('pause')
+    }
+}
+
+function toggleBtn() {
+    play.classList.toggle('pause')
+}
+
+pauseBtn();
+play.addEventListener('click', toggleBtn);
+
+//кнопки вперед и назад
+function playNext() {
+    ul.children[playNum].classList.remove('item-active');
+    playNum < playList.length - 1 ? ++playNum : playNum = 0;
+    isPlay = false;
+    playAudio();
+}
+
+function playPrev() {
+    ul.children[playNum].classList.remove('item-active');
+    playNum === 0 ? playNum = playList.length-1 : --playNum;
+    isPlay = false;
+    playAudio();
+}
+playNextBtn.addEventListener('click', playNext);
+playPrevBtn.addEventListener('click', playPrev);
 
 
-// play.addEventListener('click', playAudio);
-// play.addEventListener('click', toggleBtn);
+//создание элемента с названием трека
+const ul = document.querySelector('.play-list');
 
-// function toggleBtn() {
-//     play.classList.toggle('pause')
-// }
-
-// pauseBtn();
-
-// function nextSong() {
-
-// }
+playList.forEach(el => {
+    const li = document.createElement('li');
+    li.classList.add('play-item');
+    li.textContent = el.title;
+    ul.append(li);
+});
