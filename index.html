@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="assets/favicon.ico" rel="shortcut icon" />
-  <link rel="stylesheet" href="css/owfont-regular.css" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link href="src/assets/favicon.ico" rel="shortcut icon" />
+  <link rel="stylesheet" href="src/css/owfont-regular.css" />
+  <link rel="stylesheet" href="src/css/style.css" />
   <title>momentum</title>
 </head>
+
 <body>
   <header class="header">
     <div class="player">
+      <!-- <audio src="./src/assets/sounds/River Flows In You.mp3"></audio> -->
       <div class="player-controls">
         <button class="play-prev player-icon"></button>
-        <button class="play player-icon"></button>
+        <button class="play pause player-icon"></button>
         <button class="play-next player-icon"></button>
       </div>
       <ul class="play-list"></ul>
@@ -49,6 +52,8 @@
       <div class="author"></div>
     </div>
   </footer>
-  <script src="./index.js"></script>
+  <script src="./src/index.js"></script>
+  <script type="module" src="./src/playList.js"></script>
 </body>
+
 </html>

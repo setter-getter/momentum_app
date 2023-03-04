@@ -1,4 +1,7 @@
-// time start
+// import playList from './playList.js';
+// console.log(playList);
+
+// time 
 
 const time = document.querySelector('.time');
 showTime();
@@ -20,28 +23,31 @@ function showDate() {
     elDate.textContent = date.toLocaleDateString('en-US', options);
 }
 
-// time finish
-
-// greeting start
+// greeting 
 
 const greeting = document.querySelector('.greeting');
 getTimeOfDay();
 const name = document.querySelector('.name');
 name.addEventListener('keyup', function () {
     if (name.value.length > 20) {
-        alert('Имя слишком длинное! Введите имя меньше 20 символов.');
+        alert('The name is too long!');
         name.value = '';
     }
 })
 
 function setLocalStorage() {
     localStorage.setItem('name', name.value)
+    localStorage.setItem('city', city.value);
 }
 window.addEventListener('beforeunload', setLocalStorage)
 
 function getLocalStorage() {
     if (localStorage.getItem('name')) {
         name.value = localStorage.getItem('name')
+    }
+    if (localStorage.getItem('city')) {
+        city.value = localStorage.getItem('city');
+        getWeather();
     }
 }
 window.addEventListener('load', getLocalStorage)
@@ -52,16 +58,16 @@ function getTimeOfDay() {
     greeting.textContent = `${arrTimeOfDay[i]},`;
 }
 
-function getPartOfDay(){
+function getPartOfDay() {
     const date = new Date;
     const hours = date.getHours();
     let part = Math.trunc(hours / 6);
     return part;
 }
 
-// greeting finish
 
-//background start
+//background 
+
 let randomNum = 1;
 
 function getRandomNum() {
@@ -76,14 +82,11 @@ function setBg() {
     num < 10 ? num = num.toString().padStart(2, '0') : num = num.toString();
     if (i === 0) {
         folder = 'night'
-    }
-    else if (i === 1) {
+    } else if (i === 1) {
         folder = 'morning'
-    }
-    else if (i === 2) {
+    } else if (i === 2) {
         folder = 'afternoon'
-    }
-    else {
+    } else {
         folder = 'evening'
     }
     let url = `https://raw.githubusercontent.com/setter-getter/momentum_img/gh-pages/${folder}/${num}.jpg`;
@@ -109,30 +112,17 @@ function getSlidePrev() {
     randomNum > 1 ? randomNum-- : randomNum = 20
     setBg();
 }
-//background finish
 
-//weather widget start
+
+//weather widget
 
 const weatherIcon = document.querySelector('.weather-icon');
 const temperature = document.querySelector('.temperature');
+const weatherError = document.querySelector(".weather-error");
 const weatherDescription = document.querySelector('.weather-description');
 const city = document.querySelector('.city');
 const wind = document.querySelector('.wind');
 const humidity = document.querySelector('.humidity');
-
-// city.addEventListener('keyup', function () {
-
-// })
-
-city.value = 'Minsk';
-
-// if(!localStorage.getItem('city')){
-//     city.value = 'Minsk';
-//     getWeather();
-// }
-
-
-
 
 city.addEventListener('change', getWeather);
 
@@ -140,14 +130,19 @@ async function getWeather() {
 
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=en&appid=779ff40c3c824c3a032d675521b5b15c&units=metric`;
     const res = await fetch(url);
-    // if(res.status === 404 || res.status === 400){
-    //     alert('Введите город')
-    //     city.value = '';
-    // };
+    if (!res.ok) {
+        return (
+            (weatherError.textContent = 'City not found!'),
+            (temperature.textContent = ''),
+            (weatherDescription.textContent = ''),
+            (weatherIcon.className = ''),
+            (wind.textContent = ''),
+            (humidity.textContent = '')
+        )
+    };
     const data = await res.json();
     weatherIcon.className = 'weather-icon owf';
-    weatherDescription.textContent = '';
-    temperature.textContent = '';
+    weatherError.textContent = '';
     weatherIcon.classList.add(`owf-${data.weather[0].id}`);
     temperature.textContent = `${Math.round(data.main.temp)}°C`;
     weatherDescription.textContent = data.weather[0].description;
@@ -156,26 +151,68 @@ async function getWeather() {
 }
 getWeather();
 
+document.addEventListener('DOMContentLoaded', getWeather);
+city.addEventListener('change', getWeather);
 
 
-//weather widget finish
-
-//quotes start
+//quotes 
 
 const quoteOfDay = document.querySelector('.quote');
 const author = document.querySelector('.author');
-
+const changeQuote = document.querySelector('.change-quote')
 
 async function getQuotes() {
     let i = 0;
     i = Math.floor(Math.random() * 102)
-    const quotes = './assets/quotes.json';
+    const quotes = './src/assets/quotes.json';
     const res = await fetch(quotes);
     const data = await res.json();
     quoteOfDay.textContent = data.quotes[i].quote
     author.textContent = data.quotes[i].author
-    console.log(data.quotes);
 }
 getQuotes()
+changeQuote.addEventListener('click', getQuotes);
 
-//quotes finish
+
+// player
+
+// let isPlay = false;
+// let playNum = 0;
+// const audio = document.querySelector('audio');
+// const plaPrev = document.querySelector('.play-prev');
+// const play = document.querySelector('.play')
+// const playNext = document.querySelector('.play-next')
+// // console.log('audio',audio.json())
+
+// function playAudio() {
+//     if (!isPlay) {
+//         audio.currentTime = 0;
+//         audio.play();
+//         isPlay = true;
+//     } else {
+//         audio.pause();
+//         isPlay = false;
+//     }
+// }
+
+// function pauseBtn() {
+//     if (!isPlay) {
+//         play.classList.remove('pause')
+//     } else {
+//         play.classList.add('pause')
+//     }
+// }
+
+
+// play.addEventListener('click', playAudio);
+// play.addEventListener('click', toggleBtn);
+
+// function toggleBtn() {
+//     play.classList.toggle('pause')
+// }
+
+// pauseBtn();
+
+// function nextSong() {
+
+// }
