@@ -179,13 +179,16 @@ let isPlay = false;
 let playNum = 0;
 const audio = new Audio();
 const playPrevBtn = document.querySelector('.play-prev');
-const play = document.querySelector('.play')
-const playNextBtn = document.querySelector('.play-next')
+const play = document.querySelector('.play');
+const playNextBtn = document.querySelector('.play-next');
+const trackName = document.querySelector('.track-name');
+const trackTime = document.querySelector('.track-time');
 
 function playAudio() {
     audio.src = playList[playNum].src;
+    trackName.textContent = playList[playNum].title;
+    trackTime.textContent = playList[playNum].duration;
     if (!isPlay) {
-        // audio.currentTime = 0;
         audio.play();
         isPlay = true;
     } else {
@@ -240,3 +243,22 @@ playList.forEach(el => {
     li.textContent = el.title;
     ul.append(li);
 });
+
+let muteIcon = document.querySelector('.volume-icon');
+let trackRange = document.querySelector('.track-range'); 
+
+
+//смена иконки на mute
+
+function toggleMuteIcon(){
+    audio.muted = !audio.muted;
+    // trackRange.value = 0;
+    muteIcon.classList.toggle('volume-icon');
+    muteIcon.classList.toggle('mute-icon');   
+}
+
+muteIcon.addEventListener('click', toggleMuteIcon);
+
+// let trackName = document.querySelector('.track-name');
+
+// trackName.textContent = playList[playNum].title;

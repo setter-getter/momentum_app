@@ -77,7 +77,8 @@ body {
 .player-icon,
 .slider-icon,
 .change-quote,
-.volume-icon {
+.volume-icon,
+.mute-icon {
   width: 32px;
   height: 32px;
   background-size: 32px 32px;
@@ -135,8 +136,25 @@ body {
   background-image: url("../assets/svg/volume-icon.svg");
 }
 
+.mute-icon {
+  background-image: url("../assets/svg/volume-off.svg");
+}
+
 .track-range {
   margin-top: 1em;
+}
+
+.music-info {
+  display: flex;
+  /* flex-direction: row; */
+  /* justify-content: center; */
+}
+
+.track-time {
+  margin-left: 2rem;
+  /* justify-content: center; */
+  /* display: flex; */
+  /* align-items: flex-start; */
 }
 
 input[type='range'] {
@@ -144,6 +162,7 @@ input[type='range'] {
   background: #d9dbdc;
   border-radius: 3px;
   height: 6px;
+  margin-left: 7px;
 }
 
 input[type='range']::-webkit-slider-thumb {
