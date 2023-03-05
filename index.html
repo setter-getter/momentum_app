@@ -14,10 +14,23 @@
 <body>
   <header class="header">
     <div class="player">
-      <div class="player-controls">
-        <button class="play-prev player-icon"></button>
-        <button class="play pause player-icon"></button>
-        <button class="play-next player-icon"></button>
+      <div class="player-wrap">
+        <div class="player-controls">
+          <button class="play-prev player-icon"></button>
+          <button class="play pause player-icon"></button>
+          <button class="play-next player-icon"></button>
+        </div>
+        <div class="volume">
+          <button class="volume-icon"></button>
+          <input class="track-range" type="range" value="40">
+        </div>
+      </div>
+      <div class="music-info">
+        <span class="track-name"></span>
+        <span class="track-time"></span>
+      </div>
+      <div class="audio-track">
+        <div class="progress" id="progress"></div>
       </div>
       <ul class="play-list"></ul>
     </div>

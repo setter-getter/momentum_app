@@ -223,7 +223,7 @@ function playNext() {
 
 function playPrev() {
     ul.children[playNum].classList.remove('item-active');
-    playNum === 0 ? playNum = playList.length-1 : --playNum;
+    playNum === 0 ? playNum = playList.length - 1 : --playNum;
     isPlay = false;
     playAudio();
 }
