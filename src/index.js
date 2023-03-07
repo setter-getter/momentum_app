@@ -1,5 +1,5 @@
 import playList from './playList.js';
-console.log('playList', playList);
+// console.log('playList', playList);
 
 // time 
 
@@ -184,21 +184,39 @@ const playNextBtn = document.querySelector('.play-next');
 const trackName = document.querySelector('.track-name');
 const trackTime = document.querySelector('.track-time');
 
+//приведение времени трека к формату 0:00
+function formatTime(time) {
+    let minutes = Math.floor(time / 60);
+    let seconds = Math.floor(time % 60);
+    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+}
+
+let currrentTime = 0;
+
 function playAudio() {
     audio.src = playList[playNum].src;
     trackName.textContent = playList[playNum].title;
-    trackTime.textContent = playList[playNum].duration;
+
     if (!isPlay) {
+        audio.currentTime = currrentTime;
         audio.play();
+        setInterval(function () {
+            trackTime.textContent = formatTime(audio.currentTime) + ' / ' + playList[playNum].duration;
+        }, 1000);
+        // console.log(audio.currentTime);
         isPlay = true;
     } else {
+        // console.log('audio.currentTime',audio.currentTime);
         audio.pause();
+        currrentTime = audio.currentTime;
+        console.log(currrentTime);
         isPlay = false;
     }
     ul.children[playNum].classList.add('item-active');
 }
+
 play.addEventListener('click', playAudio);
-audio.addEventListener('ended', playNext);
+// audio.addEventListener('ended', playNext);
 
 //добаление иконки паузы после клика 
 function pauseBtn() {
@@ -245,16 +263,16 @@ playList.forEach(el => {
 });
 
 let muteIcon = document.querySelector('.volume-icon');
-let trackRange = document.querySelector('.track-range'); 
+let trackRange = document.querySelector('.track-range');
 
 
 //смена иконки на mute
 
-function toggleMuteIcon(){
+function toggleMuteIcon() {
     audio.muted = !audio.muted;
     // trackRange.value = 0;
     muteIcon.classList.toggle('volume-icon');
-    muteIcon.classList.toggle('mute-icon');   
+    muteIcon.classList.toggle('mute-icon');
 }
 
 muteIcon.addEventListener('click', toggleMuteIcon);
@@ -262,3 +280,48 @@ muteIcon.addEventListener('click', toggleMuteIcon);
 // let trackName = document.querySelector('.track-name');
 
 // trackName.textContent = playList[playNum].title;
+
+// const li = document.querySelector('li');
+// ul.forEach((item) => console.log(item));
+// li.addEventListener('click', () => console.log(li.textContent))
+
+// function getPlayNum() {
+//     let tracksList = ul.children;
+//     for (let i = 0; i < tracksList.length; i++) {
+//         tracksList[i].addEventListener('click', function () {
+//             // console.log(i)    
+//             playNum = i;
+//             playAudio();
+//             console.log('playNum = ', playNum)
+//         })
+//     }
+// }
+
+// getPlayNum();
+
+
+//линия прогресса трека
+const trackLine =  document.querySelector('.audio-track')
+const progressBar = document.querySelector('.progress');
+
+audio.addEventListener('timeupdate', function () {
+    const duration = audio.duration;
+    const currentTime = audio.currentTime;
+    const progressPercent = (currentTime / duration) * 100;
+    progressBar.style.width = progressPercent + '%';
+});
+
+
+//  когда пользователь щелкает по прогресс-бару, чтобы переместиться к определенному моменту воспроизведения
+trackLine.addEventListener('click', function (event) {
+    const progressBarWidth = trackLine.offsetWidth;
+    const clickedX = event.offsetX;
+    const duration = audio.duration;
+
+    // вычисляем новую позицию воспроизведения, на основе места, куда пользователь щелкнул на прогресс-баре
+    const newTime = (clickedX / progressBarWidth) * duration;
+
+    // устанавливаем новую позицию воспроизведения
+    audio.currentTime = newTime;
+});
+//линия прогресса трека конец
