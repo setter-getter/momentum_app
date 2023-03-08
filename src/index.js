@@ -311,13 +311,17 @@ trackLine.addEventListener('click', function (event) {
 
 //регулировка громкости
 
-// const volRange = document.querySelector('.volume-range');
-// // console.log('trackRange',trackRange.offsetWidth);
+const volContainer = document.querySelector('.volume-container');
+const volRange = document.querySelector('.volume-range');
 
-// volRange.addEventListener('mouseup', function(e){
-//     const volumeWidth = volRange.offsetWidth;
-//     const clickedX = e.offsetX;
-//     const newRange = (clickedX / volumeWidth) * 100;
-//     // volRange.value = newRange;
-//     // console.log(newRange)
-// })
+function getVolumRange() {
+    // const volumeWidth = volRange.offsetWidth;
+    // const clickedX = event.offsetX;
+    // const newRange = (clickedX / volumeWidth) * 100;
+    // audio.volume = clickedX / volContainer;
+    // volRange.style.width = `${newRange}%`;
+    // console.log('newRange', volRange.value);
+    // console.log('hi')
+}
+console.log('hi');
+volRange.addEventListener('click', getVolumRange);
