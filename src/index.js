@@ -1,8 +1,6 @@
 import playList from './playList.js';
-// console.log('playList', playList);
 
 // time 
-
 const time = document.querySelector('.time');
 showTime();
 
@@ -24,7 +22,6 @@ function showDate() {
 }
 
 // greeting 
-
 const greeting = document.querySelector('.greeting');
 getTimeOfDay();
 const name = document.querySelector('.name');
@@ -65,9 +62,7 @@ function getPartOfDay() {
     return part;
 }
 
-
 //background 
-
 let randomNum = 1;
 
 function getRandomNum() {
@@ -115,7 +110,6 @@ function getSlidePrev() {
 
 
 //weather widget
-
 const weatherIcon = document.querySelector('.weather-icon');
 const temperature = document.querySelector('.temperature');
 const weatherError = document.querySelector(".weather-error");
@@ -156,7 +150,6 @@ city.addEventListener('change', getWeather);
 
 
 //quotes 
-
 const quoteOfDay = document.querySelector('.quote');
 const author = document.querySelector('.author');
 const changeQuote = document.querySelector('.change-quote')
@@ -174,14 +167,12 @@ changeQuote.addEventListener('click', getQuotes);
 
 
 // player
-
 let isPlay = false;
 let playNum = 0;
 const audio = new Audio();
 const playPrevBtn = document.querySelector('.play-prev');
-const play = document.querySelector('.play');
+const playBtn = document.querySelector('.play');
 const playNextBtn = document.querySelector('.play-next');
-const trackName = document.querySelector('.track-name');
 const trackTime = document.querySelector('.track-time');
 
 //приведение времени трека к формату 0:00
@@ -209,30 +200,30 @@ function playAudio() {
         // console.log('audio.currentTime',audio.currentTime);
         audio.pause();
         currrentTime = audio.currentTime;
-        console.log(currrentTime);
+        // console.log(currrentTime);
         isPlay = false;
     }
     ul.children[playNum].classList.add('item-active');
 }
 
-play.addEventListener('click', playAudio);
+playBtn.addEventListener('click', playAudio);
 // audio.addEventListener('ended', playNext);
 
 //добаление иконки паузы после клика 
 function pauseBtn() {
     if (!isPlay) {
-        play.classList.remove('pause')
+        playBtn.classList.remove('pause')
     } else {
-        play.classList.add('pause')
+        playBtn.classList.add('pause')
     }
 }
 
 function toggleBtn() {
-    play.classList.toggle('pause')
+    playBtn.classList.toggle('pause')
 }
 
 pauseBtn();
-play.addEventListener('click', toggleBtn);
+playBtn.addEventListener('click', toggleBtn);
 
 //кнопки вперед и назад
 function playNext() {
@@ -262,46 +253,39 @@ playList.forEach(el => {
     ul.append(li);
 });
 
+
+//Отключение звука по клику на иконку звука, смена иконки на mute
 let muteIcon = document.querySelector('.volume-icon');
-let trackRange = document.querySelector('.track-range');
 
-
-//смена иконки на mute
-
-function toggleMuteIcon() {
+function toggleMute() {
     audio.muted = !audio.muted;
-    // trackRange.value = 0;
     muteIcon.classList.toggle('volume-icon');
     muteIcon.classList.toggle('mute-icon');
 }
 
-muteIcon.addEventListener('click', toggleMuteIcon);
+muteIcon.addEventListener('click', toggleMute);
 
-// let trackName = document.querySelector('.track-name');
+//воспроизведение трека по клику на название в списке
+const trackName = document.querySelector('.track-name');
+trackName.textContent = playList[playNum].title;
 
-// trackName.textContent = playList[playNum].title;
-
-// const li = document.querySelector('li');
-// ul.forEach((item) => console.log(item));
-// li.addEventListener('click', () => console.log(li.textContent))
-
-// function getPlayNum() {
-//     let tracksList = ul.children;
-//     for (let i = 0; i < tracksList.length; i++) {
-//         tracksList[i].addEventListener('click', function () {
-//             // console.log(i)    
-//             playNum = i;
-//             playAudio();
-//             console.log('playNum = ', playNum)
-//         })
-//     }
-// }
-
-// getPlayNum();
+function getPlayNum() {
+    let tracksList = ul.children;
+    for (let i = 0; i < tracksList.length; i++) {
+        tracksList[i].addEventListener('click', function () {
+            let temp = playNum;
+            ul.children[temp].classList.remove('item-active');
+            playNum = i;
+            isPlay = false;
+            playAudio();
+        })
+    }
+}
+getPlayNum();
 
 
 //линия прогресса трека
-const trackLine =  document.querySelector('.audio-track')
+const trackLine = document.querySelector('.audio-track')
 const progressBar = document.querySelector('.progress');
 
 audio.addEventListener('timeupdate', function () {
@@ -311,17 +295,29 @@ audio.addEventListener('timeupdate', function () {
     progressBar.style.width = progressPercent + '%';
 });
 
-
-//  когда пользователь щелкает по прогресс-бару, чтобы переместиться к определенному моменту воспроизведения
+//перемещение к определенному моменту воспроизведения
 trackLine.addEventListener('click', function (event) {
     const progressBarWidth = trackLine.offsetWidth;
     const clickedX = event.offsetX;
     const duration = audio.duration;
 
-    // вычисляем новую позицию воспроизведения, на основе места, куда пользователь щелкнул на прогресс-баре
+    // вычисление новой позиции воспроизведения, на основе места, куда пользователь щелкнул на прогресс-баре
     const newTime = (clickedX / progressBarWidth) * duration;
 
-    // устанавливаем новую позицию воспроизведения
+    //новая позиция воспроизведения
     audio.currentTime = newTime;
 });
 //линия прогресса трека конец
+
+//регулировка громкости
+
+// const volRange = document.querySelector('.volume-range');
+// // console.log('trackRange',trackRange.offsetWidth);
+
+// volRange.addEventListener('mouseup', function(e){
+//     const volumeWidth = volRange.offsetWidth;
+//     const clickedX = e.offsetX;
+//     const newRange = (clickedX / volumeWidth) * 100;
+//     // volRange.value = newRange;
+//     // console.log(newRange)
+// })
